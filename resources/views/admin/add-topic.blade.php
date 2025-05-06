@@ -1,16 +1,7 @@
 @extends('layouts.admin')
 @section('main')
-    @if (session('success'))
-        <div class="text-sm text-green-500 my-1 capitalize">
-            {{ session('success') }}
-        </div>
-    @endif
+    <x-flash-message />
 
-    @if (session('error'))
-        <div class="text-sm text-red-500 my-1 capitalize">
-            {{ session('error') }}
-        </div>
-    @endif
     <form action="{{ route('topics.store') }}" method="POST">
         @csrf
         <div>

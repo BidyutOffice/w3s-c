@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('content', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('topic_id')->constrained()->onDelete('cascade'); // Reference topics
+            $table->foreignId('topic_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->string('slug')->unique(); // URL-friendly slug
+            $table->string('slug')->unique();
             $table->text('body');
             $table->integer('sequence');
             $table->softDeletes();

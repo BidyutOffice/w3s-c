@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Content;
+use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Route;

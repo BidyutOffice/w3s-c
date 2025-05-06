@@ -21,7 +21,7 @@
 <body class="bg-slate-100">
     <div class="flex h-screen overflow-y-auto">
         <aside
-            class="fixed top-0 left-0 bottom-0 md:static z-50 w-64 bg-gradient-to-b from-blue-800 to-blue-900 text-white p-5 flex flex-col justify-between">
+            class="fixed top-0 left-0 bottom-0 md:static z-50 min-w-72 bg-gradient-to-b from-blue-800 to-blue-900 text-white p-5 flex flex-col justify-between">
             <div>
                 <h2 class="text-2xl font-bold mb-5">Student Panel</h2>
                 <nav>
@@ -35,12 +35,27 @@
                     </ul>
                 </nav>
             </div>
-            <button class="bg-red-600 hover:bg-red-500 transition-colors text-white p-2 rounded mt-4">Logout</button>
+            <button class="bg-red-600 hover:bg-red-500 transition-colors text-white p-2 rounded mt-4">
+                <a href="{{ route('logout') }}">Logout</a>
+            </button>
         </aside>
         <div class="flex-1 flex flex-col h-screen overflow-y-auto">
             <header class="bg-white shadow py-4 px-8 flex justify-end items-center sticky top-0">
                 <div>
-                    <p class="text-blue-700 uppercase"><a href="{{ route('student.profile') }}">Rahul Roy</a></p>
+                    <p class="text-blue-700 uppercase">
+                        @php
+                            $name = 'user';
+                            if (Auth::guard('students')->check()) {
+                                $name =
+                                    Auth::guard('students')->user()->first_name .
+                                    ' ' .
+                                    Auth::guard('students')->user()->last_name;
+                            }
+                        @endphp
+                        <a href="{{ route('student.profile') }}">
+                            {{ $name }}
+                        </a>
+                    </p>
                 </div>
             </header>
 

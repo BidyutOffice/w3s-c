@@ -1,56 +1,68 @@
 @extends('layouts.student')
 @section('title', 'About Rahul Roy - Student & Aspiring Professional')
 @section('main')
-    <!-- Profile Container -->
-    <div class="mx-auto p-8 rounded-lg shadow-md">
+    <div class="max-w-5xl mx-auto p-6 sm:p-10 rounded-lg space-y-4">
 
-        <!-- Header: Name, Job Title, Profile Image -->
-        <div class="flex items-center space-x-6">
-            <img src="https://via.placeholder.com/100" alt="Profile Picture"
-                class="w-24 h-24 rounded-full border-4 border-indigo-500">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800">John Doe</h1>
-                <p class="text-xl text-gray-600">Web Developer</p>
+        <div class="flex flex-col sm:flex-row items-center gap-6">
+            <img src="{{ asset('images/user-icon.png') }}" alt="Profile Picture"
+                class="w-28 h-28 rounded-full border-4 border-indigo-500 object-cover">
+
+            <div class="text-center sm:text-left">
+                <h1 class="text-3xl font-bold text-gray-800 uppercase">
+                    {{ $student->first_name }} {{ $student->last_name }}
+                </h1>
+                <p class="text-lg text-gray-500 capitalize">{{ $student->gender }}</p>
             </div>
         </div>
 
-        <!-- Bio Section -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-semibold text-gray-800">About Me</h2>
-            <p class="mt-2 text-gray-700">I'm passionate about learning new technologies and applying them in the medical
-                field. I strive to improve my skills every day and work towards making a positive impact in the world.</p>
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h2 class="text-xl font-semibold text-indigo-700 mb-3">Basic Information</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
+                <div><strong>Registration ID:</strong> {{ $student->reg_id }}</div>
+                <div><strong>Date of Birth:</strong> {{ \Carbon\Carbon::parse($student->date_of_birth)->format('F d, Y') }}
+                </div>
+                <div><strong>Status:</strong> <span class="capitalize">{{ $student->status }}</span></div>
+            </div>
         </div>
 
-        <!-- Contact Section -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-semibold text-gray-800">Contact Info</h2>
-            <ul class="mt-2 text-gray-700">
-                <li><strong>Email:</strong> johndoe@example.com</li>
-                <li><strong>LinkedIn:</strong> <a href="#" class="text-indigo-600">linkedin.com/in/johndoe</a></li>
-                <li><strong>GitHub:</strong> <a href="#" class="text-indigo-600">github.com/johndoe</a></li>
-            </ul>
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h2 class="text-xl font-semibold text-indigo-700 mb-3">Contact Information</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
+                <div><strong>Email:</strong> {{ $student->email }}</div>
+                <div>
+                    <strong>Phone:</strong>
+                    {{ substr($student->phone_number, 0, 4) }}-{{ substr($student->phone_number, 4, 3) }}-{{ substr($student->phone_number, 7, 3) }}
+                </div>
+                <div class="sm:col-span-2 capitalize flex gap-1">
+                    <strong>Address:</strong>
+                    <span>
+                        {{ $student->address }}, {{ $student->city }}<br /> {{ $student->state }} -
+                        {{ $student->zip_code }}
+                    </span>
+                </div>
+            </div>
         </div>
 
-        <!-- Skills Section -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-semibold text-gray-800">Skills</h2>
-            <ul class="mt-2 text-gray-700">
-                <li>HTML, CSS, JavaScript</li>
-                <li>React, Next.js</li>
-                <li>Medical Data Analysis</li>
-                <li>Problem Solving</li>
-            </ul>
+        <div class="bg-gray-50 p-6 rounded-lg">
+            <h2 class="text-xl font-semibold text-indigo-700 mb-3">About Me</h2>
+            <p class="text-gray-700 leading-relaxed">
+                I'm a passionate student from {{ $student->city }}, {{ $student->state }}. I enjoy learning and growing my
+                knowledge every day.
+            </p>
         </div>
 
-        <!-- Achievements Section -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-semibold text-gray-800">Achievements</h2>
-            <ul class="mt-2 text-gray-700">
-                <li>Completed Medical Technology Internship at XYZ Hospital</li>
-                <li>Participated in University Hackathon - 1st Place</li>
-                <li>Developed a web-based health management system for local clinics</li>
-            </ul>
-        </div>
-
+        {{-- <div class="p-6">
+            <h2 class="text-xl font-semibold text-indigo-700 mb-3">Course Information</h2>
+            @forelse ($student->courses as $course)
+                <div class="bg-gray-50 p-4 rounded-lg mb-2">
+                    <h4 class="text-lg font-semibold text-gray-800">{{ $course->name }}</h4>
+                    <p class="text-sm text-gray-700">Code: {{ $course->code }}</p>
+                    <p class="text-sm text-gray-700">Sold Price: ₹{{ number_format($course->pivot->sold_price, 2) }}</p>
+                    <p class="text-sm text-gray-700">Discount: {{ $course->pivot->discount }}%</p>
+                </div>
+            @empty
+                <p class="text-gray-500">No courses enrolled.</p>
+            @endforelse
+        </div> --}}
     </div>
 @endsection

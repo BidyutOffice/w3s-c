@@ -15,7 +15,6 @@ class TopicController extends Controller
     public function index(Request $request)
     {
         $subslug = $request->query("sub");
-
         $subjects = Subject::select('name', 'id', 'slug')->get();
 
         if ($subslug) {
@@ -23,20 +22,20 @@ class TopicController extends Controller
 
             if ($subject) {
                 $topics = Topic::where('subject_id', $subject->id)
-                    ->select(["id", "slug", "name", "description", "subject_id"])
+                    ->select(["id", "slug", "sequence", "name", "description", "subject_id"])
+                    ->orderBy("sequence", "asc")
                     ->paginate(10);
             } else {
-                $topics = Topic::select(["id", "slug", "name", "description", "subject_id"])
+                $topics = Topic::select(["id", "slug", "sequence", "name", "description", "subject_id"])
                     ->paginate(10);
             }
         } else {
-            $topics = Topic::select(["id", "slug", "name", "description", "subject_id"])
+            $topics = Topic::select(["id", "slug", "sequence", "name", "description", "subject_id"])
                 ->paginate(10);
         }
 
         return view("admin.manage-topic", compact("topics", "subjects"));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -122,5 +121,16 @@ class TopicController extends Controller
         } else {
             return redirect()->back()->with("error", "Failed to add subject!");
         }
+    }
+
+    public function reorder(Request $request)
+    {
+        $orderedIds = $request->orderedIds;
+
+        foreach ($orderedIds as $index => $id) {
+            Topic::where('id', $id)->update(['sequence' => $index + 1]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

@@ -7,17 +7,8 @@
             <form action="{{ route('register') }}" method="post" class="space-y-6">
                 @csrf
                 <h2 class="text-3xl font-bold text-center text-indigo-700">Create Account</h2>
-                @if (session('success'))
-                    <div class="text-sm text-green-500 my-1 capitalize">
-                        {{ session('success') }}
-                    </div>
-                @endif
 
-                @if (session('error'))
-                    <div class="text-sm text-red-500 my-1 capitalize">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                <x-flash-message />
 
                 <div class="space-y-4">
                     <!-- Name -->

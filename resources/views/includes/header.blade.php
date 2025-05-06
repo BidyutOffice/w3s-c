@@ -8,6 +8,7 @@
     <title>@yield('title', 'Welcome To W3S-C')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
@@ -15,6 +16,17 @@
     <script src="https://cdn.tiny.cloud/1/14elrc4bfiukjypfvbkt44w1228irvuaiqzag73aoa8wi920/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 
 <body>
@@ -47,26 +59,68 @@
 
             <!-- Navigation Links -->
             <nav class="flex flex-col gap-1">
+
                 <a class="flex items-center gap-3 text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2"
                     href="{{ route('admin.dashboard') }}">
                     <i class="bi bi-speedometer2"></i>
                     Dashboard
                 </a>
+
+                <!-- Manage Students Collapse -->
+                <div class="flex flex-col">
+                    <button type="button" onclick="toggleMenu('studentMenu')"
+                        class="flex items-center justify-between text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2 w-full text-left">
+                        <div class="flex items-center gap-3">
+                            <i class="bi bi-person"></i>
+                            Students
+                        </div>
+                        <i id="studentMenuIcon" class="bi bi-chevron-down"></i>
+                    </button>
+                    <div id="studentMenu" class="ml-8 flex-col gap-1 mt-1 hidden">
+                        <a href="{{ route('students.create') }}"
+                            class="text-white hover:underline transition duration-200">Add Student</a>
+                        <a href="{{ route('students.index') }}"
+                            class="text-white hover:underline transition duration-200">Manage Students</a>
+                    </div>
+                </div>
+
                 <a class="flex items-center gap-3 text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2"
                     href="{{ route('subjects.index') }}">
                     <i class="bi bi-book"></i>
-                    Manage Subjects
+                    Subjects
                 </a>
+
                 <a class="flex items-center gap-3 text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2"
                     href="{{ route('topics.index') }}">
                     <i class="bi bi-list-task"></i>
-                    Manage Topics
+                    Topics
                 </a>
+
+                <!--  Contents Collapse -->
+                <div class="flex flex-col">
+                    <button type="button" onclick="toggleMenu('contentMenu')"
+                        class="flex items-center justify-between text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2 w-full text-left">
+                        <div class="flex items-center gap-3">
+                            <i class="bi bi-file-earmark-text"></i>
+                            Contents
+                        </div>
+                        <i id="contentMenuIcon" class="bi bi-chevron-down"></i>
+                    </button>
+                    <div id="contentMenu" class="ml-8 flex-col gap-1 mt-1 hidden">
+                        <a href="{{ route('contents.create') }}"
+                            class="text-white hover:underline transition duration-200">Add Content</a>
+                        <a href="{{ route('contents.index') }}"
+                            class="text-white hover:underline transition duration-200"> Contents</a>
+                    </div>
+                </div>
+
                 <a class="flex items-center gap-3 text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2"
-                    href="{{ route('contents.index') }}">
-                    <i class="bi bi-file-earmark-text"></i>
-                    Manage Contents
+                    href="{{ route('courses.index') }}">
+                    <i class="bi bi-mortarboard"></i>
+                    Courses
                 </a>
+
             </nav>
+
         </aside>
         <main class="w-full bg-gray-900 text-gray-100 p-6 h-pannel-fixed overflow-y-auto rounded-lg shadow-lg">

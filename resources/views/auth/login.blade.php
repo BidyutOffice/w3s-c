@@ -8,17 +8,8 @@
             <form action="{{ route('login') }}" method="post" class="space-y-6">
                 @csrf
                 <p class="text-center text-3xl font-bold text-green-800">Login Here</p>
-                @if (session('success'))
-                    <div class="text-sm text-green-500 my-1 capitalize">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                <x-flash-message />
 
-                @if (session('error'))
-                    <div class="text-sm text-red-500 my-1 capitalize">
-                        {{ session('error') }}
-                    </div>
-                @endif
                 <div class="space-y-2">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input value="{{ old('email') }}" type="email" id="email" name="email"
@@ -36,6 +27,18 @@
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
                         required>
                     @error('password')
+                        <p class="text-sm text-red-500 mt-1 capitalize">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="space-y-2">
+                    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                    <select id="role" name="role"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+                        required>
+                        <option value="student">Student</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    @error('role')
                         <p class="text-sm text-red-500 mt-1 capitalize">{{ $message }}</p>
                     @enderror
                 </div>

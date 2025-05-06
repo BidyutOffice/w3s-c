@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\Subject;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class ContentController extends Controller
@@ -10,17 +12,33 @@ class ContentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return view("admin.manage-content");
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $subslug = $request->query("sub");
+        $subjects = Subject::select('name', 'id', 'slug')->get();
+
+        if ($subslug) {
+            $subject = Subject::where('slug', $subslug)->first();
+
+            if ($subject) {
+                $topics = Topic::where('subject_id', $subject->id)
+                    ->select(["id", "slug", "name", "description", "subject_id"])
+                    ->paginate(10);
+            } else {
+                $topics = Topic::select(["id", "slug", "name", "description", "subject_id"])
+                    ->paginate(10);
+            }
+        } else {
+            $topics = Topic::select(["id", "slug", "name", "description", "subject_id"])
+                ->paginate(10);
+        }
+
+        return view("admin.manage-content", compact("subjects", "topics"));
     }
 
     /**

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('slug')->unique(); // For URL-friendly identifiers
+            $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

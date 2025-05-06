@@ -39,14 +39,19 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $credentials = $request->only('email', 'password');
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
-            return redirect()->route("admin.dashboard")->with('success', 'Logged in successfully!');
-        } else {
-            return redirect()->back()->with('error', 'Invalid credentials!');
+        if ($request->role === 'admin') {
+            if (Auth::guard('admin')->attempt($credentials)) {
+                return redirect()->route('admin.dashboard');
+            }
+        } elseif ($request->role === 'student') {
+            if (Auth::guard('students')->attempt($credentials)) {
+                return redirect()->route('student.dashboard');
+            }
         }
+
+        return back()->withErrors(['email' => 'Invalid Credentials.']);
     }
 
     public function logout()

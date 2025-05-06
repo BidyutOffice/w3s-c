@@ -4,25 +4,15 @@
     <h2 class="text-lg font-bold mb-2">Add New Subject</h2>
 
     <!-- Success and Error Messages -->
-    @if (session('success'))
-        <div class="text-sm text-green-500 my-1 capitalize">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="text-sm text-red-500 my-1 capitalize">
-            {{ session('error') }}
-        </div>
-    @endif
+    <x-flash-message />
 
     <!-- Form to Add Subject -->
-    <form class="flex flex-wrap items-stretch py-3 text-gray-800 gap-4 bg-transparent rounded-lg mb-8"
+    <form class="flex flex-wrap items-stretch py-3 text-gray-100 gap-4 bg-transparent rounded-lg mb-8"
         action="{{ route('subjects.store') }}" method="POST">
         @csrf
         <div class="flex-1">
             <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Subject"
-                class="w-full p-2 border border-gray-300 outline-none rounded-lg focus:ring focus:ring-blue-500">
+                class="w-full p-2 bg-slate-700 outline-none rounded-lg focus:ring focus:ring-blue-500">
             @error('name')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
@@ -30,7 +20,7 @@
 
         <div class="flex-auto">
             <textarea name="description" id="description" rows="1" placeholder="Description"
-                class="w-full p-2 border outline-none border-gray-300 rounded-lg focus:ring focus:ring-blue-500">{{ old('description') }}</textarea>
+                class="w-full p-2 bg-slate-700 outline-none rounded-lg focus:ring focus:ring-blue-500">{{ old('description') }}</textarea>
             @error('description')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
