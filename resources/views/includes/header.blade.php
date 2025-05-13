@@ -83,6 +83,23 @@
                             class="text-white hover:underline transition duration-200">Manage Students</a>
                     </div>
                 </div>
+                <!-- Manage Payments Collapse -->
+                <div class="flex flex-col">
+                    <button type="button" onclick="toggleMenu('paymentsMenu')"
+                        class="flex items-center justify-between text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2 w-full text-left">
+                        <div class="flex items-center gap-3">
+                            <i class="bi bi-person"></i>
+                            Payments
+                        </div>
+                        <i id="paymentsMenuIcon" class="bi bi-chevron-down"></i>
+                    </button>
+                    <div id="paymentsMenu" class="ml-8 flex-col gap-1 mt-1 hidden">
+                        <a href="{{ route('payments.create') }}"
+                            class="text-white hover:underline transition duration-200">Make Payment</a>
+                        <a href="{{ route('admin.payment') }}"
+                            class="text-white hover:underline transition duration-200">Manage Payments</a>
+                    </div>
+                </div>
 
                 <a class="flex items-center gap-3 text-lg font-medium capitalize text-white hover:bg-gray-800 hover:pl-4 transition-all duration-300 ease-in-out rounded-md p-2"
                     href="{{ route('subjects.index') }}">

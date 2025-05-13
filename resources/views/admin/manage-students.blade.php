@@ -147,7 +147,6 @@
             </div>
         </div>
 
-
         <!-- EMI Fields -->
         <div id="emi_fields" class="grid grid-cols-3 gap-6 mt-4 hidden">
             <div>
@@ -184,7 +183,6 @@
     </form>
 @endsection
 
-@section('script1')
 @section('script1')
     <script>
         const courseDropdown = document.querySelector('select[name="course_id"]');
@@ -240,5 +238,4 @@
             toggleEmiFields();
         });
     </script>
-@endsection
 @endsection

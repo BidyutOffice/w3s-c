@@ -62,7 +62,7 @@ class ManageStudentesController extends Controller
         );
 
         $dob = Carbon::parse($request->date_of_birth)->format('Ymd');
-        $password = strtolower(Str::limit($request->first_name, 4, '')) . $dob;
+        $password = strtolower(Str::limit($request->first_name . $request->last_name, 4, '')) . $dob;
 
         $student = Student::create([
             'first_name'    => $request->first_name,

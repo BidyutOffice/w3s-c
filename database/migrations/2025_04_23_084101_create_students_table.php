@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
+            $table->string('password');
             $table->date('date_of_birth')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('address')->nullable();
@@ -25,10 +26,12 @@ return new class extends Migration
             $table->string('zip_code')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->enum('status', ['active', 'discontinued', 'completed', 'pending', 'suspended'])->default('active');
-            $table->enum("role", ["student"])->default("student");
+            $table->enum('role', ['student'])->default('student');
+            $table->string('slug')->nullable()->unique();
+            $table->boolean('is_active')->default(true);
+            $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('slug')->nullable()->unique();
         });
     }
 

@@ -34,6 +34,8 @@ class CourseController extends Controller
             'name' => 'required|string|max:255|unique:courses,name',
             'code' => 'required|string|max:50|unique:courses,code',
             'description' => 'required|string',
+            "base_price" => "required|integer|min:4",
+            "duration_weeks" => "required|integer|min:4",
             'credits' => 'nullable|integer|min:0|max:20',
         ]);
 

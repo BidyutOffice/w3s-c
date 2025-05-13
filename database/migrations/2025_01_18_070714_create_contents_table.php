@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('body');
-            $table->integer('sequence');
+            $table->integer('sequence')->default(1);
+            $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

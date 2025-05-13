@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('slug')->unique();
-            $table->integer('sequence');
+            $table->integer('sequence')->default(1);
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

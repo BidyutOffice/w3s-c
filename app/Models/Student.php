@@ -14,6 +14,7 @@ class Student extends Authenticatable
     protected $guarded = [];
     protected $table = 'students';
     protected $fillable = [
+        'reg_id',
         'first_name',
         'last_name',
         'email',
@@ -24,16 +25,47 @@ class Student extends Authenticatable
         'state',
         'zip_code',
         'gender',
-        'reg_id',
         'status',
+        'role',
         'slug',
-        'password'
+        'is_active',
+        'last_login_at',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($student) {
+            if (empty($student->password)) {
+                $student->password = bcrypt("default1234");
+            }
+        });
+    }
+
     protected $hidden = ['password'];
 
     public function studentCourses()
     {
         return $this->hasMany(StudentCourse::class);
+    }
+
+    public function getPaymentSummary()
+    {
+        $pivot = $this->courses->first()?->pivot;
+        $studentCourse = $this->studentCourses->first();
+
+        // Check if studentCourse exists before trying to access payments
+        $payments = $studentCourse ? $studentCourse->payments : collect();
+
+        $paidAmount = ($pivot->enrolment_fee ?? 0) + $payments->sum('amount');
+        $due = $pivot ? $pivot->sold_price - $paidAmount : 0;
+
+        return [
+            'pivot' => $pivot,
+            'studentCourse' => $studentCourse,
+            'payments' => $payments,
+            'paidAmount' => $paidAmount,
+            'due' => $due,
+        ];
     }
 
     public function courses()

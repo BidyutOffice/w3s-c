@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('payment_date');
             $table->string('reference_no')->nullable();
             $table->enum('method', ['cash', 'card', 'upi', 'netbanking', 'other'])->default('cash');
+            $table->enum('payment_by', ['admin', 'student', 'other'])->default('admin');
             $table->text('notes')->nullable();
 
             $table->timestamps();

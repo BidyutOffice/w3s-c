@@ -11,11 +11,15 @@ class Course extends Model
 {
     protected $fillable = [
         'name',
-        'code',
         'slug',
+        'code',
         'description',
         'credits',
+        'duration_weeks',
+        'base_price',
+        'is_active',
     ];
+
 
     public function getRouteKeyName()
     {

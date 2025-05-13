@@ -10,7 +10,15 @@ class Topic extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'slug', 'sequence', 'description', 'subject_id'];
+    protected $fillable = [
+        'subject_id',
+        'name',
+        'slug',
+        'sequence',
+        'description',
+        'is_active',
+    ];
+
     public static function boot()
     {
         parent::boot();

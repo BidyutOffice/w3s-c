@@ -11,7 +11,12 @@ class Subject extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'slug', 'description'];
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'is_active',
+    ];
 
     public function courses()
     {

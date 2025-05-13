@@ -6,6 +6,7 @@ use App\Http\Controllers\ContentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManageStudentesController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TopicController;
@@ -24,6 +25,11 @@ Route::prefix("auth")->group(function () {
 Route::prefix("admin")->middleware("admin")->group(function () {
     Route::get('/dashboard', [AdminController::class, "dashboard"])->name("admin.dashboard");
 
+    Route::get("/payments", [PaymentsController::class, "index"])->name("admin.payment");
+    Route::get('/payments/create', [PaymentsController::class, 'create'])->name('payments.create');
+    Route::post('/payments/search-student', [PaymentsController::class, 'searchStudent'])->name('payments.searchStudent');
+    Route::post('/payments/store', [PaymentsController::class, 'store'])->name('payments.store');
+
     Route::resources([
         "subjects" => SubjectController::class,
         "topics" => TopicController::class,
@@ -41,4 +47,6 @@ Route::prefix("admin")->middleware("admin")->group(function () {
 Route::prefix("student")->middleware('student')->group(function () {
     Route::get("/dashboard", [StudentController::class, "dashboard"])->name("student.dashboard");
     Route::get("/profile", [StudentController::class, "profile"])->name("student.profile");
+    Route::get("course-and-payments", [StudentController::class, "courseAndPayments"])->name("student.courseAndPayments");
+    Route::get('payments/pdf', [StudentController::class, 'downloadPaymentsPDF'])->name('student.payments.pdf');
 });

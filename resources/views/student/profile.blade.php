@@ -1,7 +1,8 @@
 @extends('layouts.student')
-@section('title', 'About Rahul Roy - Student & Aspiring Professional')
+@section('title', 'About ' . $student->first_name . ' ' . $student->last_name . ' - Student & Aspiring Professional')
+
 @section('main')
-    <div class="max-w-5xl mx-auto p-6 sm:p-10 rounded-lg space-y-4">
+    <div class="max-w-5xl mx-auto py-6 md:px-6 px-3 rounded-lg space-y-4">
 
         <div class="flex flex-col sm:flex-row items-center gap-6">
             <img src="{{ asset('images/user-icon.png') }}" alt="Profile Picture"
@@ -33,7 +34,7 @@
                     <strong>Phone:</strong>
                     {{ substr($student->phone_number, 0, 4) }}-{{ substr($student->phone_number, 4, 3) }}-{{ substr($student->phone_number, 7, 3) }}
                 </div>
-                <div class="sm:col-span-2 capitalize flex gap-1">
+                <div class="sm:col-span-2 capitalize">
                     <strong>Address:</strong>
                     <span>
                         {{ $student->address }}, {{ $student->city }}<br /> {{ $student->state }} -
