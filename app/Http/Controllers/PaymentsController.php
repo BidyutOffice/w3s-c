@@ -23,7 +23,23 @@ class PaymentsController extends Controller
 
     public function create()
     {
-        return view("admin.make-payment");
+        $students = Student::with('courses')->get();
+        $studentsList = $students->map(function ($student) {
+            return [
+                'id' => $student->id,
+                'first_name' => $student->first_name,
+                'last_name' => $student->last_name,
+                'reg_id' => $student->reg_id,
+                'courses' => $student->courses->map(function ($course) {
+                    return [
+                        'id' => $course->id,
+                        'name' => $course->name,
+                    ];
+                })->toArray(),
+            ];
+        });
+
+        return view("admin.make-payment", compact("studentsList"));
     }
 
     public function searchStudent(Request $request)

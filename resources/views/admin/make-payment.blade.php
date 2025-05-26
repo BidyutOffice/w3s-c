@@ -24,7 +24,23 @@
         </div>
     </form>
 
-    <div id="studentInfoContainer"></div>
+    <div class="grid md:grid-cols-4 gap-6">
+        {{-- Left: Student List --}}
+        <div class="md:col-span-1 bg-slate-800 p-4 rounded-xl max-h-[70vh] overflow-auto mt-6 shadow-lg">
+            <h3 class="text-white text-lg font-semibold mb-4">📋 Student List</h3>
+            <ul id="studentList">
+                @foreach ($studentsList as $student)
+                    <li class="cursor-pointer capitalize px-3 py-2 rounded text-gray-100 hover:bg-slate-700 hover:text-white transition text-sm"
+                        onclick='displayStudentForm(@json($student))'>
+                        {{ $student['first_name'] }} {{ $student['last_name'] }} ({{ $student['reg_id'] }})
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
+        {{-- Right: Payment Form --}}
+        <div id="studentInfoContainer" class="md:col-span-3"></div>
+    </div>
 @endsection
 
 @section('script1')
@@ -35,7 +51,6 @@
         const studentInfoContainer = document.getElementById("studentInfoContainer");
 
         let debounceTimer;
-
         const debounce = (func, delay = 300) => {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(func, delay);
@@ -77,9 +92,9 @@
                 searchResults.classList.remove("hidden");
 
                 data.students.forEach(student => {
-                    const li = createElement("li", "px-4 py-2 cursor-pointer text-lg capitalize",
-                        `${student.first_name} ${student.last_name} (${student.reg_id})`
-                    );
+                    const li = createElement("li",
+                        "px-4 py-2 cursor-pointer text-lg capitalize hover:bg-blue-500 hover:text-white",
+                        `${student.first_name} ${student.last_name} (${student.reg_id})`);
                     li.onclick = () => displayStudentForm(student);
                     searchResults.appendChild(li);
                 });
@@ -98,47 +113,47 @@
             ).join('');
 
             studentInfoContainer.innerHTML = `
-            <div class="bg-slate-800 p-6 rounded-xl mt-6">
-                <h3 class="text-lg font-semibold text-white mb-4">👤 Student Info</h3>
-                <p class="text-gray-200 mb-2 capitalize"><strong>Name:</strong> ${student.first_name} ${student.last_name}</p>
-                <p class="text-gray-200 mb-2"><strong>Reg ID:</strong> ${student.reg_id}</p>
+        <div class="bg-slate-800 p-6 rounded-xl mt-6 shadow-xl animate-fade-in">
+            <h3 class="text-lg font-semibold text-white mb-4">👤 Student Info</h3>
+            <p class="text-gray-200 mb-1 capitalize"><strong>Name:</strong> ${student.first_name} ${student.last_name}</p>
+            <p class="text-gray-200 mb-4"><strong>Reg ID:</strong> ${student.reg_id}</p>
 
-                <form action="{{ route('payments.store') }}" method="POST" class="mt-4 space-y-4">
-                    @csrf
-                    <input type="hidden" name="student_id" value="${student.id}">
-                    
-                    <label class="block text-white">Select Course:</label>
-                    <select name="course_id" required
-                        class="form-select w-full p-2 rounded bg-slate-700 outline-none focus:ring focus:ring-blue-500">
+            <form action="{{ route('payments.store') }}" method="POST" class="space-y-4">
+                @csrf
+                <input type="hidden" name="student_id" value="${student.id}">
+
+                <div>
+                    <label class="block text-white mb-1">Select Course:</label>
+                    <select name="course_id" required class="form-select w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring focus:ring-blue-500">
+                        <option disabled selected>Select a course</option>
                         ${courseOptions}
                     </select>
+                </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="number" step="0.01" name="amount" placeholder="Enter Amount"
-                            class="form-input p-2 rounded bg-slate-700 outline-none focus:ring focus:ring-blue-500" required>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="number" step="0.01" name="amount" placeholder="Enter Amount" class="form-input p-2 rounded bg-slate-700 text-white outline-none focus:ring focus:ring-blue-500" required>
 
-                        <input type="date" name="payment_date" value="{{ now()->format('Y-m-d') }}"
-                            class="form-input p-2 rounded bg-slate-700 outline-none focus:ring focus:ring-blue-500" required>
-                    </div>
+                    <input type="date" name="payment_date" value="{{ now()->format('Y-m-d') }}" class="form-input p-2 rounded bg-slate-700 text-white outline-none focus:ring focus:ring-blue-500" required>
+                </div>
 
-                    <label class="block text-white mt-2">Payment Method:</label>
-                    <select name="method"
-                        class="form-select w-full p-2 rounded bg-slate-700 outline-none focus:ring focus:ring-blue-500" required>
+                <div>
+                    <label class="block text-white mt-2 mb-1">Payment Method:</label>
+                    <select name="method" class="form-select w-full p-2 rounded bg-slate-700 text-white outline-none focus:ring focus:ring-blue-500" required>
+                        <option disabled selected>Select method</option>
                         <option value="cash">Cash</option>
                         <option value="upi">UPI</option>
                         <option value="card">Card</option>
                         <option value="bank">Bank Transfer</option>
                     </select>
+                </div>
 
-                    <input type="text" name="reference_no" placeholder="Reference No (optional)"
-                        class="form-input w-full p-2 rounded mt-2 bg-slate-700 outline-none focus:ring focus:ring-blue-500">
+                <input type="text" name="reference_no" placeholder="Reference No (optional)" class="form-input w-full p-2 rounded mt-2 bg-slate-700 text-white outline-none focus:ring focus:ring-blue-500">
 
-                    <button type="submit" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                        Submit Payment
-                    </button>
-                </form>
-            </div>
-        `;
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+                    Submit Payment
+                </button>
+            </form>
+        </div>`;
         };
 
         [nameInput, regInput].forEach(input => {
@@ -147,7 +162,7 @@
 
         document.addEventListener('click', (e) => {
             if (!searchResults.contains(e.target) && !nameInput.contains(e.target) && !regInput.contains(e
-                .target)) {
+                    .target)) {
                 searchResults.classList.add("hidden");
             }
         });

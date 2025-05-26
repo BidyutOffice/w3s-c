@@ -52,45 +52,52 @@ class ManageStudentesController extends Controller
      */
     public function store(StoreStudentRequest $request)
     {
-        $course = Course::findOrFail($request->course_id);
 
+        // Fetch the course
+        $course = Course::findOrFail($request['course_id']);
+
+        // Generate registration ID
         $regId = 'IMS' . $course->code . now()->format('Ym') . str_pad(
-            Student::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count() + 1,
+            Student::whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->count() + 1,
             4,
             '0',
             STR_PAD_LEFT
         );
 
-        $dob = Carbon::parse($request->date_of_birth)->format('Ymd');
-        $password = strtolower(Str::limit($request->first_name . $request->last_name, 4, '')) . $dob;
+        // Generate password using name + DOB
+        $dob = Carbon::parse($request['date_of_birth'])->format('Ymd');
+        $password = strtolower(Str::limit($request['first_name'] . ($request['last_name'] ?? ''), 4, '')) . $dob;
 
+        // Create the student
         $student = Student::create([
-            'first_name'    => $request->first_name,
-            'last_name'     => $request->last_name,
-            'email'         => $request->email,
-            'date_of_birth' => $request->date_of_birth,
-            'phone_number'  => $request->phone_number,
-            'address'       => $request->address,
-            'city'          => $request->city,
-            'state'         => $request->state,
-            'zip_code'      => $request->zip_code,
-            'gender'        => $request->gender,
+            'first_name'    => $request['first_name'],
+            'last_name'     => $request['last_name'] ?? null,
+            'email'         => $request['email'],
+            'date_of_birth' => $request['date_of_birth'],
+            'phone_number'  => $request['phone_number'],
+            'address'       => $request['address'],
+            'city'          => $request['city'],
+            'state'         => $request['state'],
+            'zip_code'      => $request['zip_code'],
+            'gender'        => $request['gender'],
             'reg_id'        => $regId,
             'password'      => Hash::make($password),
         ]);
 
-        // Store pivot data with or without EMI
+        // Attach course with optional EMI details
         $student->courses()->attach($course->id, [
-            'sold_price'     => $request->sold_price,
-            'discount'       => $request->discount ?? 0,
-            'enrolment_fee'  => $request->enrolment_fee,
-            'payment_mode'   => $request->payment_mode,
-            'emi_months'     => $request->payment_mode === 'emi' ? $request->emi_months : null,
-            'emi_amount'     => $request->payment_mode === 'emi' ? $request->emi_amount : null,
-            'emi_start_date' => $request->payment_mode === 'emi' ? $request->emi_start_date : null,
+            'sold_price'     => $request['sold_price'],
+            'discount'       => $request['discount'] ?? 0,
+            'enrolment_fee'  => $request['enrolment_fee'],
+            'payment_mode'   => $request['payment_mode'],
+            'emi_months'     => $request['payment_mode'] === 'emi' ? $request['emi_months'] : null,
+            'emi_amount'     => $request['payment_mode'] === 'emi' ? $request['emi_amount'] : null,
+            'emi_start_date' => $request['payment_mode'] === 'emi' ? $request['emi_start_date'] : null,
         ]);
 
-        // Update slug
+        // Update student slug
         $student->update([
             'slug' => $student->id . '-' . Str::slug($student->first_name . ' ' . $student->last_name),
         ]);

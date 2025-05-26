@@ -30,15 +30,16 @@ class Student extends Authenticatable
         'slug',
         'is_active',
         'last_login_at',
+        'password'
     ];
 
     protected static function booted()
     {
-        static::creating(function ($student) {
-            if (empty($student->password)) {
-                $student->password = bcrypt("default1234");
-            }
-        });
+        // static::creating(function ($student) {
+        //     if (empty($student->password)) {
+        //         $student->password = bcrypt("default1234");
+        //     }
+        // });
     }
 
     protected $hidden = ['password'];
